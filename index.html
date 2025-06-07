@@ -21,10 +21,8 @@
       text-align: center;
       width: 100%;
       max-width: 500px;
-
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       position: relative;
-
     }
 
     .logo {
@@ -51,6 +49,7 @@
     .suggestions {
       text-align: left;
       border: 1px solid #ccc;
+      border-top: none;
       border-radius: 0 0 5px 5px;
       max-height: 150px;
       overflow-y: auto;
@@ -59,6 +58,7 @@
       width: calc(100% - 60px);
       left: 30px;
       z-index: 1;
+      display: none;
     }
 
     .suggestion-item {
@@ -68,7 +68,6 @@
 
     .suggestion-item:hover {
       background-color: #f0f0f0;
-
     }
 
     .button {
@@ -81,7 +80,6 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
-
     }
 
     .button:hover {
@@ -118,14 +116,12 @@
     <h1>Rechercher un pilote</h1>
     <input type="text" placeholder="Nom ou prénom du pilote" id="searchInput" class="input-field" oninput="showSuggestions()">
     <div class="suggestions" id="suggestions"></div>
-
     <button class="button" onclick="searchPilot()">Rechercher</button>
     <div id="resultBox"></div>
   </div>
 
   <script>
     const pilots = [
-
       {
         prenom: "Jocelyn",
         nom: "Maury",
@@ -152,12 +148,17 @@
       const suggestionBox = document.getElementById('suggestions');
       suggestionBox.innerHTML = '';
 
-      if (input.length < 1) return;
-
       const matches = pilots.filter(pilot =>
         pilot.nom.toLowerCase().startsWith(input) ||
         pilot.prenom.toLowerCase().startsWith(input)
       );
+
+      if (matches.length === 0 || input.length < 1) {
+        suggestionBox.style.display = 'none';
+        return;
+      }
+
+      suggestionBox.style.display = 'block';
 
       matches.forEach(pilot => {
         const item = document.createElement('div');
@@ -166,6 +167,7 @@
         item.onclick = () => {
           document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
           suggestionBox.innerHTML = '';
+          suggestionBox.style.display = 'none';
           searchPilot();
         };
         suggestionBox.appendChild(item);
@@ -174,10 +176,10 @@
 
     function searchPilot() {
       const input = document.getElementById('searchInput').value.toLowerCase().trim();
-
       const resultBox = document.getElementById('resultBox');
       const suggestionBox = document.getElementById('suggestions');
       suggestionBox.innerHTML = '';
+      suggestionBox.style.display = 'none';
       resultBox.innerHTML = '';
 
       const found = pilots.find(p =>
@@ -185,13 +187,11 @@
       );
 
       if (found) {
-
         resultBox.innerHTML = `
           <div class="result-box">
             <h2>${found.prenom} ${found.nom}</h2>
             <p><strong>Palmarès :</strong> ${found.palmares}</p>
-            ${found.blacklist ? `<p class="blacklist">Blacklisté : ${found.raison}</p>` : `<p style="color:green;">Aucun signalement</p>`}
-
+            ${found.blacklist ? `<p class="blacklist">Blacklisté : ${found.raison}</p>` : ``}
           </div>
         `;
       } else {
