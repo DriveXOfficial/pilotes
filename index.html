@@ -48,6 +48,7 @@
 
     .suggestions {
       width: 100%;
+      margin-top: 5px;
       background-color: white;
       border: 1px solid #ccc;
       border-top: none;
@@ -56,7 +57,6 @@
       display: none;
       position: relative;
       z-index: 5;
-      margin-bottom: 10px;
     }
 
     .suggestion-item {
@@ -79,7 +79,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      margin-top: 5px;
+      margin-top: 15px;
     }
 
     .button:hover {
@@ -96,6 +96,7 @@
     }
 
     .result-box h2 {
+      color: #4CAF50;
       margin-bottom: 10px;
       font-size: 22px;
     }
@@ -115,10 +116,6 @@
       color: red;
       font-weight: bold;
       margin-top: 15px;
-    }
-
-    .red-name {
-      color: red;
     }
   </style>
 </head>
@@ -152,7 +149,8 @@
           "Champion Sprint Cup 2024"
         ],
         blacklist: true,
-        raison: "Comportement toxique récurrent"
+        raison: "Comportement toxique récurrent",
+        blacklistePar: "DriveX Official"
       },
       {
         prenom: "Vincent",
@@ -161,7 +159,8 @@
           "Aucun Palmarès chez DriveX Official"
         ],
         blacklist: true,
-        raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription"
+        raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription",
+        blacklistePar: "DriveX Official"
       },
       {
         prenom: "David",
@@ -170,7 +169,8 @@
           "Aucun Palmarès chez DriveX Official"
         ],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)"
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
+        blacklistePar: "DriveX Official"
       },
       {
         prenom: "Romain",
@@ -179,7 +179,8 @@
           "Aucun Palmarès chez DriveX Official"
         ],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)"
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
+        blacklistePar: "DriveX Official"
       },
       {
         prenom: "Alexandre",
@@ -188,7 +189,8 @@
           "Aucun Palmarès chez DriveX Official"
         ],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)"
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
+        blacklistePar: "DriveX Official"
       },
       {
         prenom: "Rowan",
@@ -245,15 +247,18 @@
       );
 
       if (found) {
-        const nameClass = found.blacklist ? 'red-name' : '';
         resultBox.innerHTML = `
           <div class="result-box">
-            <h2 class="${nameClass}">${found.prenom} ${found.nom}</h2>
+            <h2>${found.prenom} ${found.nom}</h2>
             <p><strong>Palmarès :</strong></p>
             <ul>
               ${found.palmares.map(item => `<li>${item}</li>`).join('')}
             </ul>
-            ${found.blacklist ? `<p class="blacklist">Blacklisté : ${found.raison}</p>` : ''}
+            ${
+              found.blacklist
+                ? `<p class="blacklist">Blacklisté par : ${found.blacklistePar}<br>Raison : ${found.raison}</p>`
+                : ``
+            }
           </div>
         `;
       } else {
