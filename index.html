@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Recherche Pilote - DriveX Official</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #F97316, #EB5210, #D93717, #C2251B, #B91C1C);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .box {
+      background-color: white;
+      padding: 40px 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo {
+      max-width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    .button {
+      background-color: #D95F1F;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #C54F1A;
+    }
+
+    .result-box {
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .result-box h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .result-box p {
+      margin: 6px 0;
+    }
+
+    .blacklist {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <img src="https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;0;0;0,width=480,height=480/image/504851985/bbff4301-cc7e-4683-ab47-3c7e82eaa301.png" alt="Logo DriveX Official" class="logo">
+    <h1>Rechercher un pilote</h1>
+    <input type="text" placeholder="ID du pilote" id="pilotId" class="input-field">
+    <button class="button" onclick="searchPilot()">Rechercher</button>
+    <div id="resultBox"></div>
+  </div>
+
+  <script>
+    const pilots = {
+      "F12001": {
+        prenom: "Jocelyn",
+        nom: "Maury",
+        palmares: "Champion F1 DriveX S1",
+        blacklist: false
+      },
+      "F12002": {
+        prenom: "Melvin",
+        nom: "Castilla",
+        palmares: "Vice-champion F1 DriveX S1",
+        blacklist: true,
+        raison: "Comportement toxique récurrent"
+      },
+      "F12003": {
+        prenom: "Rowan",
+        nom: "Deverre",
+        palmares: "3ème place F1 DriveX S1",
+        blacklist: false
+      }
+    };
+
+    function searchPilot() {
+      const id = document.getElementById('pilotId').value.trim().toUpperCase();
+      const resultBox = document.getElementById('resultBox');
+
+      if (!id || id.length < 3) {
+        resultBox.innerHTML = "<p style='color:red;'>Veuillez entrer un ID valide.</p>";
+        return;
+      }
+
+      const pilot = pilots[id];
+      if (pilot) {
+        resultBox.innerHTML = `
+          <div class="result-box">
+            <h2>${pilot.prenom} ${pilot.nom}</h2>
+            <p><strong>Palmarès :</strong> ${pilot.palmares}</p>
+            ${pilot.blacklist ? `<p class="blacklist">Blacklité : ${pilot.raison}</p>` : `<p style="color:green;">Aucun signalement</p>`}
+          </div>
+        `;
+      } else {
+        resultBox.innerHTML = `
+          <div class="result-box">
+            <p>Aucun pilote trouvé avec cet identifiant.</p>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
