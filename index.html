@@ -48,17 +48,14 @@
 
     .suggestions {
       width: 100%;
-      margin-top: 5px;
       background-color: white;
       border: 1px solid #ccc;
       border-top: none;
       border-radius: 0 0 5px 5px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       display: none;
-      position: absolute;
       z-index: 5;
-      max-height: 200px;
-      overflow-y: auto;
+      position: relative;
     }
 
     .suggestion-item {
@@ -98,6 +95,7 @@
     }
 
     .result-box h2 {
+      color: #4CAF50;
       margin-bottom: 10px;
       font-size: 22px;
     }
@@ -123,12 +121,11 @@
       font-size: 15px;
     }
 
-    .blacklist strong {
-      display: inline-block;
-      width: 120px;
+    .blacklist p {
+      margin: 4px 0;
     }
 
-    .red-name {
+    .blacklisted-name {
       color: red;
     }
   </style>
@@ -164,7 +161,7 @@
         ],
         blacklist: true,
         raison: "Comportement toxique récurrent",
-        blacklistePar: "DriveX Official"
+        structure: "DriveX Official"
       },
       {
         prenom: "Vincent",
@@ -174,7 +171,7 @@
         ],
         blacklist: true,
         raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription",
-        blacklistePar: "DriveX Official"
+        structure: "DriveX Official"
       },
       {
         prenom: "David",
@@ -183,8 +180,8 @@
           "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
-        blacklistePar: "DriveX Official"
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
       },
       {
         prenom: "Romain",
@@ -193,8 +190,8 @@
           "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
-        blacklistePar: "DriveX Official"
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
       },
       {
         prenom: "Alexandre",
@@ -203,8 +200,8 @@
           "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
-        blacklistePar: "DriveX Official"
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
       },
       {
         prenom: "Rowan",
@@ -237,9 +234,7 @@
       matches.forEach(pilot => {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
-        item.innerHTML = pilot.blacklist
-          ? `<span class="red-name">${pilot.prenom} ${pilot.nom}</span>`
-          : `${pilot.prenom} ${pilot.nom}`;
+        item.innerHTML = `<span class="${pilot.blacklist ? 'blacklisted-name' : ''}">${pilot.prenom} ${pilot.nom}</span>`;
         item.onclick = () => {
           document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
           suggestionBox.innerHTML = '';
@@ -265,14 +260,14 @@
       if (found) {
         resultBox.innerHTML = `
           <div class="result-box">
-            <h2 class="${found.blacklist ? 'red-name' : ''}">${found.prenom} ${found.nom}</h2>
+            <h2 class="${found.blacklist ? 'blacklisted-name' : ''}">${found.prenom} ${found.nom}</h2>
             <p><strong>Palmarès :</strong></p>
             <ul>
               ${found.palmares.map(item => `<li>${item}</li>`).join('')}
             </ul>
             ${found.blacklist ? `
               <div class="blacklist">
-                <p><strong>Blacklisté par :</strong> ${found.blacklistePar}</p>
+                <p><strong>Blacklisté par :</strong> ${found.structure}</p>
                 <p><strong>Raison :</strong> ${found.raison}</p>
               </div>
             ` : ``}
