@@ -55,8 +55,10 @@
       border-radius: 0 0 5px 5px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       display: none;
-      position: relative;
+      position: absolute;
       z-index: 5;
+      max-height: 200px;
+      overflow-y: auto;
     }
 
     .suggestion-item {
@@ -96,7 +98,6 @@
     }
 
     .result-box h2 {
-      color: #4CAF50;
       margin-bottom: 10px;
       font-size: 22px;
     }
@@ -113,9 +114,22 @@
     }
 
     .blacklist {
-      color: red;
-      font-weight: bold;
+      border: 2px solid #f44336;
+      background-color: #ffe5e5;
+      color: #a10000;
+      padding: 12px;
+      border-radius: 8px;
       margin-top: 15px;
+      font-size: 15px;
+    }
+
+    .blacklist strong {
+      display: inline-block;
+      width: 120px;
+    }
+
+    .red-name {
+      color: red;
     }
   </style>
 </head>
@@ -156,7 +170,7 @@
         prenom: "Vincent",
         nom: "Jugier",
         palmares: [
-          "Aucun Palmarès chez DriveX Official"
+          "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
         raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription",
@@ -166,7 +180,7 @@
         prenom: "David",
         nom: "Lefevre",
         palmares: [
-          "Aucun Palmarès chez DriveX Official"
+          "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
         raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
@@ -176,7 +190,7 @@
         prenom: "Romain",
         nom: "Mannara",
         palmares: [
-          "Aucun Palmarès chez DriveX Official"
+          "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
         raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
@@ -186,7 +200,7 @@
         prenom: "Alexandre",
         nom: "Clerteaud",
         palmares: [
-          "Aucun Palmarès chez DriveX Official"
+          "Aucun Palmarès chez DriveX Official",
         ],
         blacklist: true,
         raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois (à 1 mois de l'évènement)",
@@ -223,7 +237,9 @@
       matches.forEach(pilot => {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
-        item.innerText = `${pilot.prenom} ${pilot.nom}`;
+        item.innerHTML = pilot.blacklist
+          ? `<span class="red-name">${pilot.prenom} ${pilot.nom}</span>`
+          : `${pilot.prenom} ${pilot.nom}`;
         item.onclick = () => {
           document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
           suggestionBox.innerHTML = '';
@@ -249,16 +265,17 @@
       if (found) {
         resultBox.innerHTML = `
           <div class="result-box">
-            <h2>${found.prenom} ${found.nom}</h2>
+            <h2 class="${found.blacklist ? 'red-name' : ''}">${found.prenom} ${found.nom}</h2>
             <p><strong>Palmarès :</strong></p>
             <ul>
               ${found.palmares.map(item => `<li>${item}</li>`).join('')}
             </ul>
-            ${
-              found.blacklist
-                ? `<p class="blacklist">Blacklisté par : ${found.blacklistePar}<br>Raison : ${found.raison}</p>`
-                : ``
-            }
+            ${found.blacklist ? `
+              <div class="blacklist">
+                <p><strong>Blacklisté par :</strong> ${found.blacklistePar}</p>
+                <p><strong>Raison :</strong> ${found.raison}</p>
+              </div>
+            ` : ``}
           </div>
         `;
       } else {
