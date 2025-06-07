@@ -20,8 +20,11 @@
       border-radius: 10px;
       text-align: center;
       width: 100%;
-      max-width: 450px;
+      max-width: 500px;
+
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+
     }
 
     .logo {
@@ -42,7 +45,30 @@
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+    }
+
+    .suggestions {
+      text-align: left;
+      border: 1px solid #ccc;
+      border-radius: 0 0 5px 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      background-color: #fff;
+      position: absolute;
+      width: calc(100% - 60px);
+      left: 30px;
+      z-index: 1;
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+
     }
 
     .button {
@@ -54,7 +80,8 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      margin-top: 10px;
+
     }
 
     .button:hover {
@@ -89,56 +116,88 @@
   <div class="box">
     <img src="https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;0;0;0,width=480,height=480/image/504851985/bbff4301-cc7e-4683-ab47-3c7e82eaa301.png" alt="Logo DriveX Official" class="logo">
     <h1>Rechercher un pilote</h1>
-    <input type="text" placeholder="ID du pilote" id="pilotId" class="input-field">
+    <input type="text" placeholder="Nom ou prénom du pilote" id="searchInput" class="input-field" oninput="showSuggestions()">
+    <div class="suggestions" id="suggestions"></div>
+
     <button class="button" onclick="searchPilot()">Rechercher</button>
     <div id="resultBox"></div>
   </div>
 
   <script>
-    const pilots = {
-      "F12001": {
+    const pilots = [
+
+      {
         prenom: "Jocelyn",
         nom: "Maury",
         palmares: "Champion F1 DriveX S1",
         blacklist: false
       },
-      "F12002": {
+      {
         prenom: "Melvin",
         nom: "Castilla",
         palmares: "Vice-champion F1 DriveX S1",
         blacklist: true,
         raison: "Comportement toxique récurrent"
       },
-      "F12003": {
+      {
         prenom: "Rowan",
         nom: "Deverre",
         palmares: "3ème place F1 DriveX S1",
         blacklist: false
       }
-    };
+    ];
+
+    function showSuggestions() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const suggestionBox = document.getElementById('suggestions');
+      suggestionBox.innerHTML = '';
+
+      if (input.length < 1) return;
+
+      const matches = pilots.filter(pilot =>
+        pilot.nom.toLowerCase().startsWith(input) ||
+        pilot.prenom.toLowerCase().startsWith(input)
+      );
+
+      matches.forEach(pilot => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.innerText = `${pilot.prenom} ${pilot.nom}`;
+        item.onclick = () => {
+          document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
+          suggestionBox.innerHTML = '';
+          searchPilot();
+        };
+        suggestionBox.appendChild(item);
+      });
+    }
 
     function searchPilot() {
-      const id = document.getElementById('pilotId').value.trim().toUpperCase();
+      const input = document.getElementById('searchInput').value.toLowerCase().trim();
+
       const resultBox = document.getElementById('resultBox');
+      const suggestionBox = document.getElementById('suggestions');
+      suggestionBox.innerHTML = '';
+      resultBox.innerHTML = '';
 
-      if (!id || id.length < 3) {
-        resultBox.innerHTML = "<p style='color:red;'>Veuillez entrer un ID valide.</p>";
-        return;
-      }
+      const found = pilots.find(p =>
+        `${p.prenom.toLowerCase()} ${p.nom.toLowerCase()}` === input
+      );
 
-      const pilot = pilots[id];
-      if (pilot) {
+      if (found) {
+
         resultBox.innerHTML = `
           <div class="result-box">
-            <h2>${pilot.prenom} ${pilot.nom}</h2>
-            <p><strong>Palmarès :</strong> ${pilot.palmares}</p>
-            ${pilot.blacklist ? `<p class="blacklist">Blacklité : ${pilot.raison}</p>` : `<p style="color:green;">Aucun signalement</p>`}
+            <h2>${found.prenom} ${found.nom}</h2>
+            <p><strong>Palmarès :</strong> ${found.palmares}</p>
+            ${found.blacklist ? `<p class="blacklist">Blacklisté : ${found.raison}</p>` : `<p style="color:green;">Aucun signalement</p>`}
+
           </div>
         `;
       } else {
         resultBox.innerHTML = `
           <div class="result-box">
-            <p>Aucun pilote trouvé avec cet identifiant.</p>
+            <p>Aucun pilote trouvé avec ce nom.</p>
           </div>
         `;
       }
