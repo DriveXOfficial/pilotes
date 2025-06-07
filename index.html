@@ -1,95 +1,227 @@
-<script>
-  const pilots = [
-    {
-      prenom: "Jocelyn",
-      nom: "Maury",
-      palmares: [
-        "Champion F1 DriveX S1",
-        "4ème place Endurance 24h DriveX",
-        "Vice-champion F2 DriveX S2"
-      ],
-      blacklist: false
-    },
-    {
-      prenom: "Melvin",
-      nom: "Castilla",
-      palmares: [
-        "Vice-champion F1 DriveX S1",
-        "Champion Sprint Cup 2024"
-      ],
-      blacklist: true,
-      raison: "Comportement toxique récurrent"
-    },
-    {
-      prenom: "Rowan",
-      nom: "Deverre",
-      palmares: [
-        "3ème place F1 DriveX S1"
-      ],
-      blacklist: false
-    }
-  ];
-
-  function showSuggestions() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    const suggestionBox = document.getElementById('suggestions');
-    suggestionBox.innerHTML = '';
-
-    const matches = pilots.filter(pilot =>
-      pilot.nom.toLowerCase().startsWith(input) ||
-      pilot.prenom.toLowerCase().startsWith(input)
-    );
-
-    if (matches.length === 0 || input.length < 1) {
-      suggestionBox.style.display = 'none';
-      return;
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Recherche Pilotes - DriveX Official</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #F97316, #EB5210, #D93717, #C2251B, #B91C1C);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    suggestionBox.style.display = 'block';
+    .box {
+      background-color: white;
+      padding: 40px 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
 
-    matches.forEach(pilot => {
-      const item = document.createElement('div');
-      item.className = 'suggestion-item';
-      item.innerText = `${pilot.prenom} ${pilot.nom}`;
-      item.onclick = () => {
-        document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
-        suggestionBox.innerHTML = '';
+    .logo {
+      max-width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 18px;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 170px;
+      width: 100%;
+      left: 0;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      z-index: 10;
+      border-radius: 0 0 5px 5px;
+      display: none;
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .button {
+      background-color: #D95F1F;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #C54F1A;
+    }
+
+    .result-box {
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .result-box h2 {
+      color: #4CAF50;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .result-box p,
+    .result-box li {
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .result-box ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    .blacklist {
+      color: red;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <img src="https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;0;0;0,width=480,height=480/image/504851985/bbff4301-cc7e-4683-ab47-3c7e82eaa301.png" alt="Logo DriveX Official" class="logo">
+    <h1>Recherche de Pilote</h1>
+    <input type="text" placeholder="Entrez Prénom Nom" class="input-field" id="searchInput" oninput="showSuggestions()">
+    <div class="suggestions" id="suggestions"></div>
+    <button class="button" onclick="searchPilot()">Rechercher</button>
+    <div id="resultBox"></div>
+  </div>
+
+  <script>
+    const pilots = [
+      {
+        prenom: "Jocelyn",
+        nom: "Maury",
+        palmares: [
+          "Champion F1 DriveX S1",
+          "4ème place Endurance 24h DriveX",
+          "Vice-champion F2 DriveX S2"
+        ],
+        blacklist: false
+      },
+      {
+        prenom: "Melvin",
+        nom: "Castilla",
+        palmares: [
+          "Vice-champion F1 DriveX S1",
+          "Champion Sprint Cup 2024"
+        ],
+        blacklist: true,
+        raison: "Comportement toxique récurrent"
+      },
+      {
+        prenom: "Rowan",
+        nom: "Deverre",
+        palmares: [
+          "3ème place F1 DriveX S1"
+        ],
+        blacklist: false
+      }
+    ];
+
+    function showSuggestions() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const suggestionBox = document.getElementById('suggestions');
+      suggestionBox.innerHTML = '';
+
+      const matches = pilots.filter(pilot =>
+        pilot.nom.toLowerCase().startsWith(input) ||
+        pilot.prenom.toLowerCase().startsWith(input)
+      );
+
+      if (matches.length === 0 || input.length < 1) {
         suggestionBox.style.display = 'none';
-        searchPilot();
-      };
-      suggestionBox.appendChild(item);
-    });
-  }
+        return;
+      }
 
-  function searchPilot() {
-    const input = document.getElementById('searchInput').value.toLowerCase().trim();
-    const resultBox = document.getElementById('resultBox');
-    const suggestionBox = document.getElementById('suggestions');
-    suggestionBox.innerHTML = '';
-    suggestionBox.style.display = 'none';
-    resultBox.innerHTML = '';
+      suggestionBox.style.display = 'block';
 
-    const found = pilots.find(p =>
-      `${p.prenom.toLowerCase()} ${p.nom.toLowerCase()}` === input
-    );
-
-    if (found) {
-      resultBox.innerHTML = `
-        <div class="result-box">
-          <h2>${found.prenom} ${found.nom}</h2>
-          <p><strong>Palmarès :</strong></p>
-          <ul>
-            ${found.palmares.map(item => `<li>${item}</li>`).join('')}
-          </ul>
-          ${found.blacklist ? `<p class="blacklist">Blacklisté : ${found.raison}</p>` : ``}
-        </div>
-      `;
-    } else {
-      resultBox.innerHTML = `
-        <div class="result-box">
-          <p>Aucun pilote trouvé avec ce nom.</p>
-        </div>
-      `;
+      matches.forEach(pilot => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.innerText = `${pilot.prenom} ${pilot.nom}`;
+        item.onclick = () => {
+          document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
+          suggestionBox.innerHTML = '';
+          suggestionBox.style.display = 'none';
+          searchPilot();
+        };
+        suggestionBox.appendChild(item);
+      });
     }
-  }
-</script>
+
+    function searchPilot() {
+      const input = document.getElementById('searchInput').value.toLowerCase().trim();
+      const resultBox = document.getElementById('resultBox');
+      const suggestionBox = document.getElementById('suggestions');
+      suggestionBox.innerHTML = '';
+      suggestionBox.style.display = 'none';
+      resultBox.innerHTML = '';
+
+      const found = pilots.find(p =>
+        `${p.prenom.toLowerCase()} ${p.nom.toLowerCase()}` === input
+      );
+
+      if (found) {
+        resultBox.innerHTML = `
+          <div class="result-box">
+            <h2>${found.prenom} ${found.nom}</h2>
+            <p><strong>Palmarès :</strong></p>
+            <ul>
+              ${found.palmares.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+            ${found.blacklist ? `<p class="blacklist">Blacklisté : ${found.raison}</p>` : ``}
+          </div>
+        `;
+      } else {
+        resultBox.innerHTML = `
+          <div class="result-box">
+            <p>Aucun pilote trouvé avec ce nom.</p>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
