@@ -37,6 +37,11 @@
       margin-bottom: 20px;
     }
 
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
     .input-field {
       width: 100%;
       padding: 12px;
@@ -44,13 +49,14 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       font-weight: bold;
+      box-sizing: border-box;
     }
 
     .suggestions {
       position: absolute;
-      top: 195px; /* ajusté pour être sous le champ input */
-      left: 30px;
-      width: calc(100% - 60px); /* ajusté pour coller au padding */
+      top: 100%;
+      left: 0;
+      right: 0;
       background-color: white;
       border: 1px solid #ccc;
       border-top: none;
@@ -124,7 +130,7 @@
     }
 
     .blacklist p {
-      margin: 4px 0;
+      margin: 6px 0;
     }
 
     .blacklisted-name {
@@ -136,26 +142,104 @@
   <div class="box">
     <img src="https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;0;0;0,width=480,height=480/image/504851985/bbff4301-cc7e-4683-ab47-3c7e82eaa301.png" alt="Logo DriveX Official" class="logo">
     <h1>Recherche de Pilote</h1>
-    <input type="text" placeholder="Entrez Prénom Nom" class="input-field" id="searchInput" oninput="showSuggestions()">
-    <div class="suggestions" id="suggestions"></div>
+    <div class="input-wrapper">
+      <input type="text" placeholder="Entrez Prénom Nom" class="input-field" id="searchInput" oninput="showSuggestions()">
+      <div class="suggestions" id="suggestions"></div>
+    </div>
     <button class="button" onclick="searchPilot()">Rechercher</button>
     <div id="resultBox"></div>
   </div>
 
   <script>
     const pilots = [
-      { prenom: "Jocelyn", nom: "Maury", palmares: ["Champion F1 DriveX S1"], blacklist: false },
-      { prenom: "Bilal", nom: "Eddaoudi", palmares: ["P12 F1 DriveX S1"], blacklist: false },
-      { prenom: "Kevin", nom: "Laforce", palmares: ["Aucun palmares chez DriveX Official"], blacklist: true, raison: "Manque de sérieux. Ne s'inscrit à aucune course F1 DriveX en étant inscrit pour la saison", structure: "DriveX Official" },
-      { prenom: "Gaetan", nom: "Lorenzo", palmares: ["Aucun palmares chez DriveX Official"], blacklist: true, raison: "Manque de sérieux. Ne s'inscrit à aucune course F1 DriveX en étant inscrit pour la saison", structure: "DriveX Official" },
-      { prenom: "Hazan", nom: "Keherz", palmares: ["Aucun palmares chez DriveX Official"], blacklist: true, raison: "Manque de sérieux. Ne s'inscrit à aucune course F1 DriveX en étant inscrit pour la saison", structure: "DriveX Official" },
-      { prenom: "Melvin", nom: "Castilla", palmares: ["Vice-champion F1 DriveX S1", "Champion Sprint Cup 2024"], blacklist: false },
-      { prenom: "Vincent", nom: "Jugier", palmares: ["Aucun Palmarès chez DriveX Official"], blacklist: true, raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription", structure: "DriveX Official" },
-      { prenom: "David", nom: "Lefevre", palmares: ["Aucun Palmarès chez DriveX Official"], blacklist: true, raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois", structure: "DriveX Official" },
-      { prenom: "Romain", nom: "Mannara", palmares: ["Aucun Palmarès chez DriveX Official"], blacklist: true, raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois", structure: "DriveX Official" },
-      { prenom: "Alexandre", nom: "Clerteaud", palmares: ["Aucun Palmarès chez DriveX Official"], blacklist: true, raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois", structure: "DriveX Official" },
-      { prenom: "Maxime", nom: "Smokiiih-Rup", palmares: ["Aucun Palmarès chez DriveX Official"], blacklist: true, raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois", structure: "DriveX Official" },
-      { prenom: "Rowan", nom: "Deverre", palmares: ["3ème place F1 DriveX S1"], blacklist: false }
+      {
+        prenom: "Jocelyn",
+        nom: "Maury",
+        palmares: ["Champion F1 DriveX S1"],
+        blacklist: false
+      },
+      {
+        prenom: "Bilal",
+        nom: "Eddaoudi",
+        palmares: ["P12 F1 DriveX S1"],
+        blacklist: false
+      },
+      {
+        prenom: "Kevin",
+        nom: "Laforce",
+        palmares: ["Aucun palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Gaetan",
+        nom: "Lorenzo",
+        palmares: ["Aucun palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Hazan",
+        nom: "Keherz",
+        palmares: ["Aucun palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Melvin",
+        nom: "Castilla",
+        palmares: ["Vice-champion F1 DriveX S1", "Champion Sprint Cup 2024"],
+        blacklist: false
+      },
+      {
+        prenom: "Vincent",
+        nom: "Jugier",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "David",
+        nom: "Lefevre",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Romain",
+        nom: "Mannara",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Alexandre",
+        nom: "Clerteaud",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Maxime",
+        nom: "Smokiiih-Rup",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official"
+      },
+      {
+        prenom: "Rowan",
+        nom: "Deverre",
+        palmares: ["3ème place F1 DriveX S1"],
+        blacklist: false
+      }
     ];
 
     function showSuggestions() {
