@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Recherche Pilotes - DriveX Official</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #1e3a8a, #2563eb, #3b82f6);
+      background: linear-gradient(to right, #0D6EFD, #0848C0);
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -25,9 +25,21 @@
       position: relative;
     }
 
+    /* Cercle bleu derrière le logo */
+    .logo-wrapper {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: #0D6EFD;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px auto;
+    }
+
     .logo {
       max-width: 100px;
-      margin-bottom: 20px;
+      max-height: 100px;
     }
 
     h1 {
@@ -77,7 +89,7 @@
     }
 
     .button {
-      background-color: #2563eb;
+      background-color: #0D6EFD; /* bleu */
       color: white;
       border: none;
       padding: 12px 20px;
@@ -90,7 +102,7 @@
     }
 
     .button:hover {
-      background-color: #1d4ed8;
+      background-color: #0848C0;
     }
 
     .result-box {
@@ -103,7 +115,7 @@
     }
 
     .result-box h2 {
-      color: #2563eb;
+      color: #4CAF50;
       margin-bottom: 10px;
       font-size: 22px;
     }
@@ -140,10 +152,18 @@
 </head>
 <body>
   <div class="box">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Blue_circle_icon.svg/768px-Blue_circle_icon.svg.png" alt="Logo DriveX Bleu" class="logo">
+    <div class="logo-wrapper">
+      <img src="https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;0;0;0,width=480,height=480/image/518041438/3de061a3-59b5-4683-b9c9-f12e36e06970.png" alt="Logo DriveX Official" class="logo" />
+    </div>
     <h1>Recherche de Pilote</h1>
     <div class="input-wrapper">
-      <input type="text" placeholder="Entrez Prénom Nom" class="input-field" id="searchInput" oninput="showSuggestions()">
+      <input
+        type="text"
+        placeholder="Entrez Prénom Nom"
+        class="input-field"
+        id="searchInput"
+        oninput="showSuggestions()"
+      />
       <div class="suggestions" id="suggestions"></div>
     </div>
     <button class="button" onclick="searchPilot()">Rechercher</button>
@@ -152,94 +172,133 @@
 
   <script>
     const pilots = [
-      { prenom: "Jocelyn", nom: "Maury", palmares: ["Champion F1 DriveX S1"], blacklist: false },
-      { prenom: "Bilal", nom: "Eddaoudi", palmares: ["P12 F1 DriveX S1"], blacklist: false },
       {
-        prenom: "Kevin", nom: "Laforce",
+        prenom: "Jocelyn",
+        nom: "Maury",
+        palmares: ["Champion F1 DriveX S1"],
+        blacklist: false,
+      },
+      {
+        prenom: "Bilal",
+        nom: "Eddaoudi",
+        palmares: ["P12 F1 DriveX S1"],
+        blacklist: false,
+      },
+      {
+        prenom: "Kevin",
+        nom: "Laforce",
         palmares: ["Aucun palmarès chez DriveX Official"],
         blacklist: true,
-        raison: "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
-        structure: "DriveX Official"
+        raison:
+          "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
+        structure: "DriveX Official",
       },
       {
-        prenom: "Gaetan", nom: "Lorenzo",
+        prenom: "Gaetan",
+        nom: "Lorenzo",
         palmares: ["Aucun palmarès chez DriveX Official"],
         blacklist: true,
-        raison: "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
-        structure: "DriveX Official"
+        raison:
+          "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
+        structure: "DriveX Official",
       },
       {
-        prenom: "Hazan", nom: "Keherz",
+        prenom: "Hazan",
+        nom: "Keherz",
         palmares: ["Aucun palmarès chez DriveX Official"],
         blacklist: true,
-        raison: "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
-        structure: "DriveX Official"
-      },
-      { prenom: "Melvin", nom: "Castilla", palmares: ["Vice-champion F1 DriveX S1", "Champion Sprint Cup 2024"], blacklist: false },
-      {
-        prenom: "Vincent", nom: "Jugier",
-        palmares: ["Aucun Palmarès chez DriveX Official"],
-        blacklist: true,
-        raison: "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription",
-        structure: "DriveX Official"
+        raison:
+          "Manque de sérieux. Ne participe à aucune course F1 DriveX en étant inscrit pour la saison",
+        structure: "DriveX Official",
       },
       {
-        prenom: "David", nom: "Lefevre",
-        palmares: ["Aucun Palmarès chez DriveX Official"],
-        blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
-        structure: "DriveX Official"
+        prenom: "Melvin",
+        nom: "Castilla",
+        palmares: ["Vice-champion F1 DriveX S1", "Champion Sprint Cup 2024"],
+        blacklist: false,
       },
       {
-        prenom: "Romain", nom: "Mannara",
+        prenom: "Vincent",
+        nom: "Jugier",
         palmares: ["Aucun Palmarès chez DriveX Official"],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
-        structure: "DriveX Official"
+        raison:
+          "Manque de respect auprès de l'organisation des 24h DriveX ; tente de soudoyer contre une inscription",
+        structure: "DriveX Official",
       },
       {
-        prenom: "Alexandre", nom: "Clerteaud",
+        prenom: "David",
+        nom: "Lefevre",
         palmares: ["Aucun Palmarès chez DriveX Official"],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
-        structure: "DriveX Official"
+        raison:
+          "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official",
       },
       {
-        prenom: "Maxime", nom: "Smokiiih-Rup",
+        prenom: "Romain",
+        nom: "Mannara",
         palmares: ["Aucun Palmarès chez DriveX Official"],
         blacklist: true,
-        raison: "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
-        structure: "DriveX Official"
+        raison:
+          "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official",
       },
-      { prenom: "Rowan", nom: "Deverre", palmares: ["3ème place F1 DriveX S1"], blacklist: false }
+      {
+        prenom: "Alexandre",
+        nom: "Clerteaud",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison:
+          "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official",
+      },
+      {
+        prenom: "Maxime",
+        nom: "Smokiiih-Rup",
+        palmares: ["Aucun Palmarès chez DriveX Official"],
+        blacklist: true,
+        raison:
+          "Manque de sérieux auprès de l'organisation des 24h DriveX ; aucune réponse pendant plus de 2 mois",
+        structure: "DriveX Official",
+      },
+      {
+        prenom: "Rowan",
+        nom: "Deverre",
+        palmares: ["3ème place F1 DriveX S1"],
+        blacklist: false,
+      },
     ];
 
     function showSuggestions() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      const suggestionBox = document.getElementById('suggestions');
-      suggestionBox.innerHTML = '';
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = "";
 
-      const matches = pilots.filter(pilot =>
-        pilot.nom.toLowerCase().startsWith(input) ||
-        pilot.prenom.toLowerCase().startsWith(input) ||
-        (`${pilot.prenom.toLowerCase()} ${pilot.nom.toLowerCase()}`).startsWith(input)
+      const matches = pilots.filter(
+        (pilot) =>
+          pilot.nom.toLowerCase().startsWith(input) ||
+          pilot.prenom.toLowerCase().startsWith(input) ||
+          `${pilot.prenom.toLowerCase()} ${pilot.nom.toLowerCase()}`.startsWith(input)
       );
 
       if (matches.length === 0 || input.length < 1) {
-        suggestionBox.style.display = 'none';
+        suggestionBox.style.display = "none";
         return;
       }
 
-      suggestionBox.style.display = 'block';
+      suggestionBox.style.display = "block";
 
-      matches.forEach(pilot => {
-        const item = document.createElement('div');
-        item.className = 'suggestion-item';
-        item.innerHTML = `<span class="${pilot.blacklist ? 'blacklisted-name' : ''}">${pilot.prenom} ${pilot.nom}</span>`;
+      matches.forEach((pilot) => {
+        const item = document.createElement("div");
+        item.className = "suggestion-item";
+        item.innerHTML = `<span class="${
+          pilot.blacklist ? "blacklisted-name" : ""
+        }">${pilot.prenom} ${pilot.nom}</span>`;
         item.onclick = () => {
-          document.getElementById('searchInput').value = `${pilot.prenom} ${pilot.nom}`;
-          suggestionBox.innerHTML = '';
-          suggestionBox.style.display = 'none';
+          document.getElementById("searchInput").value = `${pilot.prenom} ${pilot.nom}`;
+          suggestionBox.innerHTML = "";
+          suggestionBox.style.display = "none";
           searchPilot();
         };
         suggestionBox.appendChild(item);
@@ -247,31 +306,40 @@
     }
 
     function searchPilot() {
-      const input = document.getElementById('searchInput').value.toLowerCase().trim();
-      const resultBox = document.getElementById('resultBox');
-      const suggestionBox = document.getElementById('suggestions');
-      suggestionBox.innerHTML = '';
-      suggestionBox.style.display = 'none';
-      resultBox.innerHTML = '';
+      const input = document
+        .getElementById("searchInput")
+        .value.toLowerCase()
+        .trim();
+      const resultBox = document.getElementById("resultBox");
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = "";
+      suggestionBox.style.display = "none";
+      resultBox.innerHTML = "";
 
-      const found = pilots.find(p =>
-        `${p.prenom.toLowerCase()} ${p.nom.toLowerCase()}` === input
+      const found = pilots.find(
+        (p) => `${p.prenom.toLowerCase()} ${p.nom.toLowerCase()}` === input
       );
 
       if (found) {
         resultBox.innerHTML = `
           <div class="result-box">
-            <h2 class="${found.blacklist ? 'blacklisted-name' : ''}">${found.prenom} ${found.nom}</h2>
+            <h2 class="${
+              found.blacklist ? "blacklisted-name" : ""
+            }">${found.prenom} ${found.nom}</h2>
             <p><strong>Palmarès :</strong></p>
             <ul>
-              ${found.palmares.map(item => `<li>${item}</li>`).join('')}
+              ${found.palmares.map((item) => `<li>${item}</li>`).join("")}
             </ul>
-            ${found.blacklist ? `
+            ${
+              found.blacklist
+                ? `
               <div class="blacklist">
                 <p><strong>Blacklisté par :</strong> ${found.structure}</p>
                 <p><strong>Raison :</strong> ${found.raison}</p>
               </div>
-            ` : ``}
+            `
+                : ``
+            }
           </div>
         `;
       } else {
