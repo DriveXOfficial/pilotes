@@ -37,8 +37,8 @@
     }
 
     .logo {
-      max-width: 75px;
-      max-height: 75px;
+      max-width: 110px;
+      max-height: 110px;
     }
 
     h1 {
@@ -164,7 +164,88 @@
   </div>
 
   <script>
-    // Ton script JavaScript ici : filtrage, suggestions, affichage des résultats, etc.
+    const pilots = [
+      {
+        name: "Lucas Martin",
+        championships: ["F1 DriveX 2024", "DriveX Endurance 2023"],
+        results: ["1er - F1 DriveX 2024", "3e - Endurance 2023"],
+        blacklist: false
+      },
+      {
+        name: "Thomas Dupont",
+        championships: ["F2 DriveX 2024"],
+        results: ["4e - F2 DriveX 2023"],
+        blacklist: {
+          reason: "Comportement antisportif",
+          date: "12/02/2024"
+        }
+      },
+      {
+        name: "Emma Durand",
+        championships: ["DriveX Rookie Cup 2025"],
+        results: ["2e - Rookie Cup 2024"],
+        blacklist: false
+      }
+    ];
+
+    function showSuggestions() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const suggestionsBox = document.getElementById('suggestions');
+      suggestionsBox.innerHTML = '';
+      if (input.length === 0) {
+        suggestionsBox.style.display = 'none';
+        return;
+      }
+
+      const matches = pilots.filter(p => p.name.toLowerCase().includes(input));
+      matches.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.textContent = p.name;
+        item.onclick = () => {
+          document.getElementById('searchInput').value = p.name;
+          suggestionsBox.style.display = 'none';
+        };
+        suggestionsBox.appendChild(item);
+      });
+
+      suggestionsBox.style.display = matches.length > 0 ? 'block' : 'none';
+    }
+
+    function searchPilot() {
+      const name = document.getElementById('searchInput').value.trim().toLowerCase();
+      const pilot = pilots.find(p => p.name.toLowerCase() === name);
+      const resultBox = document.getElementById('resultBox');
+      resultBox.innerHTML = '';
+
+      if (!pilot) {
+        resultBox.innerHTML = "<p>Aucun pilote trouvé.</p>";
+        return;
+      }
+
+      const box = document.createElement('div');
+      box.className = 'result-box';
+      box.innerHTML = `
+        <h2>${pilot.name}</h2>
+        <p><strong>Championnats en cours :</strong></p>
+        <ul>${pilot.championships.map(ch => `<li>${ch}</li>`).join('')}</ul>
+        <p><strong>Palmarès :</strong></p>
+        <ul>${pilot.results.map(res => `<li>${res}</li>`).join('')}</ul>
+      `;
+
+      if (pilot.blacklist) {
+        const bl = document.createElement('div');
+        bl.className = 'blacklist';
+        bl.innerHTML = `
+          <p><strong class="blacklisted-name">${pilot.name}</strong> est actuellement <strong>blacklisté</strong>.</p>
+          <p>Raison : ${pilot.blacklist.reason}</p>
+          <p>Date : ${pilot.blacklist.date}</p>
+        `;
+        box.appendChild(bl);
+      }
+
+      resultBox.appendChild(box);
+    }
   </script>
 </body>
 </html>
