@@ -220,6 +220,7 @@
         results: ["1er - F1 DriveX - S1", "1er - F1 DriveX - S3"],
         blacklist: {
           reason: "Fraude en vue de remporter un championnat constructeur",
+          bannedBy: "DriveX Official",
           date: "24/07/2025"
         }
       },
@@ -229,6 +230,7 @@
         results: ["Aucun"],
         blacklist: {
           reason: "Comportement antisportif ; Manque de respect",
+          bannedBy: "DriveX Official",
           date: "20/05/2025"
         }
       },
@@ -237,35 +239,9 @@
         championships: ["Aucun"],
         results: ["Aucun"],
         blacklist: {
-          reason: "Banni par la LSX",
-          date: "07/07/2025"
-        }
-      },
-      {
-        name: "Sebastien HOLIN",
-        championships: ["Aucun"],
-        results: ["Aucun"],
-        blacklist: {
-          reason: "Banni par la Security CORP : Multiples contacts virils, sorties, comportements douteux en piste",
-          date: "12/03/2025"
-        }
-      },
-      {
-        name: "Filipo Vrakas",
-        championships: ["Aucun"],
-        results: ["Aucun"],
-        blacklist: {
-          reason: "Banni par LMU France : Cheat Code avéré",
-          date: "21/07/2025"
-        }
-      },
-      {
-        name: "Nicolas Xan",
-        championships: ["Aucun"],
-        results: ["Aucun"],
-        blacklist: {
-          reason: "Banni par LMU France : non respect des Drapeaux Bleu 13 accrochages recensé en 1h30 de course",
-          date: "28/07/2025"
+          reason: "Crashs Intentionnels ; Vengeance sur la piste",
+          bannedBy: "LSX",
+          date: "24/07/2025"
         }
       },
       {
@@ -273,17 +249,9 @@
         championships: ["Aucun"],
         results: ["Aucun"],
         blacklist: {
-          reason: "Comportement antisportif ; Manque de respect",
+          reason: "Comportement antisportif",
+          bannedBy: "DriveX Official",
           date: "05/06/2025"
-        }
-      },
-      {
-        name: "Florian Chevreuil",
-        championships: ["Aucun"],
-        results: ["Aucun"],
-        blacklist: {
-          reason: "Crashs Intentionnels ; Vengeance sur la piste",
-          date: "24/07/2025"
         }
       },
       {
@@ -291,7 +259,8 @@
         championships: ["Aucun"],
         results: ["Aucun"],
         blacklist: {
-          reason: "Comportement antisportif ; Manque de sérieux (s'inscrit à un tournoi sans participer)",
+          reason: "Comportement antisportif",
+          bannedBy: "DriveX Official",
           date: "08/06/2025"
         }
       },
@@ -301,6 +270,7 @@
         results: ["2e - F1 DriveX - S3"],
         blacklist: {
           reason: "Fraude en vue de remporter le titre constructeur",
+          bannedBy: "DriveX Official",
           date: "08/06/2025"
         }
       },
@@ -310,19 +280,14 @@
         results: ["Aucun"],
         blacklist: {
           reason: "Comportement antisportif",
+          bannedBy: "DriveX Official",
           date: "11/06/2025"
         }
       },
       {
         name: "Rowan Deverre",
-        championships: ["F1 DriveX - S3"],
-        results: ["3e - F1 DriveX - S1"],
-        blacklist: false
-      },
-      {
-        name: "Quentin Caliez",
-        championships: ["Président DriveX Official"],
-        results: ["Non Précisé"],
+        championships: ["Aucun"],
+        results: ["3e - F1 DriveX - S1","2e - F1 DriveX - S3"],
         blacklist: false
       }
     ];
@@ -378,6 +343,7 @@
         bl.innerHTML = `
           <p><strong class="blacklisted-name">${pilot.name}</strong> est actuellement <strong>blacklisté</strong>.</p>
           <p>Raison : ${pilot.blacklist.reason}</p>
+          <p>Banni par : ${pilot.blacklist.bannedBy}</p>
           <p>Date : ${pilot.blacklist.date}</p>
         `;
         box.appendChild(bl);
